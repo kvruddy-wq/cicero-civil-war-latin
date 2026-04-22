@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cicero in Bello Civili – Latin 3 Branched Narrative</title>
+  <style>
+    :root { --bg:#020617; --panel:#0b1220; --text:#e5e7eb; --muted:#cbd5f5; --btn:#1e293b; --btnh:#334155; --bd:#475569; }
+    body{ font-family: system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg); color:var(--text); margin:0; padding:2rem; display:flex; justify-content:center; }
+    .container{ max-width: 900px; width:100%; }
+    h1{ font-size:1.8rem; margin:0 0 .25rem; }
+    .sub{ color:#94a3b8; margin:0 0 1.25rem; }
+    .card{ background: rgba(255,255,255,.03); border:1px solid rgba(148,163,184,.25); border-radius: 16px; padding: 1.25rem; }
+    .titleRow{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    .pill{ font-size:.85rem; color:#a7b3e6; border:1px solid rgba(148,163,184,.25); padding:.25rem .6rem; border-radius:999px; }
+    p{ line-height:1.65; font-size:1.05rem; margin:.75rem 0; }
+    button{ width:100%; padding:.85rem; margin-top:.6rem; background:var(--btn); color:var(--text); border:1px solid rgba(148,163,184,.20); border-radius: 14px; font-size:1rem; cursor:pointer; text-align:left; }
+    button:hover{ background:var(--btnh); }
+    .grid{ display:grid; grid-template-columns: 1fr; gap:14px; }
+    @media (min-width: 980px){ .grid{ grid-template-columns: 2fr 1fr; } }
+    .sectionTitle{ font-size:1.05rem; margin:1.25rem 0 .5rem; color:#a7b3e6; }
+    .gloss{ border-bottom: 1px dotted #94a3b8; cursor: help; position: relative; }
+    .gloss:hover::after{
+      content: attr(data-gloss);
+      position:absolute; left:0; bottom:1.6rem;
+      background: #0b1220; color: var(--text);
+      border:1px solid var(--bd);
+      padding:.45rem .55rem; border-radius:.5rem;
+      white-space: nowrap; font-size:.85rem; z-index: 20;
+      box-shadow: 0 16px 50px rgba(0,0,0,.4);
+    }
+    textarea{ width:100%; min-height:120px; margin-top:.5rem; background:#020617; color:var(--text); border:1px solid var(--bd); border-radius: 12px; padding:.75rem; font-size:.98rem; }
+    .small{ color:#94a3b8; font-size:.95rem; }
+    .toolbar{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-top: 1rem; }
+    .toolbar .left, .toolbar .right{ display:flex; gap:10px; flex-wrap:wrap; }
+    .miniBtn{ width:auto; padding:.55rem .75rem; font-size:.95rem; border-radius: 12px; }
+    .teacher-note{ margin-top: 1.5rem; padding: 1rem 1.25rem; border-top: 1px solid rgba(148,163,184,.25); color: var(--muted); font-size: .98rem; }
+    .teacher-note ul{ margin:.5rem 0 0 1.2rem; }
+    .teacher-note li{ margin:.25rem 0; }
+    .alert{ margin-top: .6rem; padding: .7rem .85rem; border-radius: 12px; border: 1px solid rgba(148,163,184,.25); background: rgba(255,255,255,.03); color:#dbeafe; display:none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="titleRow">
+      <div>
+        <h1>Cicero in Bello Civili</h1>
+        <p class="sub">Latin 3 • Suburani Book 2 (first half) • Interpretive reading • No subjunctives</p>
+      </div>
+      <div class="pill" id="progressPill">Initium</div>
+    </div>
+
+
+    <div class="grid">
+      <div class="card">
+        <div class="titleRow">
+          <h2 id="sceneTitle" style="margin:0; font-size:1.35rem;"></h2>
+          <div class="pill" id="nodeIdPill"></div>
+        </div>
+        <p id="latin"></p>
+
+
+        <div class="sectionTitle">Quid dēcernis?</div>
+        <div id="choices"></div>
+
+
+        <div class="sectionTitle">Explanātiō tua (Latīnē)</div>
+        <p class="small">Citā saltem <strong>ūnam</strong> sententiam ē textū quae cōnsilium tuum ostendit (exemplum: <em>"Cicero dubitat quid faciendum sit"</em>).</p>
+        <textarea id="justify" placeholder="Scrībe Latīnē… (ex. ‘Dēcrevī domī manēre, quod ‘tempus incertum esse’ Atticus scrīpsit.)"></textarea>
+        <div class="toolbar">
+          <div class="left">
+            <button class="miniBtn" id="saveBtn">Servā responsum</button>
+            <button class="miniBtn" id="downloadBtn">Dēpone (download) responsum</button>
+          </div>
+          <div class="right">
+            <button class="miniBtn" id="restartBtn">Reīncīpe</button>
+          </div>
+        </div>
+        <div class="alert" id="savedAlert">Servātum est ✅</div>
+      </div>
+
+
+      <div class="card">
+        <div class="sectionTitle" style="margin-top:0;">Comprehēnsiō</div>
+        <div id="checks"></div>
+        <div class="sectionTitle">Glossae (hover)</div>
+        <p class="small">Verba cum lineā punctātā glossās habent: mūre super verba (hover) ut videās.</p>
+
+
+        <div class="teacher-note">
+          <h3 style="margin:.25rem 0 .5rem; font-size:1.05rem;">Teacher Notes (for you)</h3>
+          <ul>
+            <li><strong>Level:</strong> Latin 3 (Suburani Book 2, first half; Book 1 review)</li>
+            <li><strong>Focus:</strong> Interpretive reading; grammar embedded in context (no explicit grammar questions)</li>
+            <li><strong>Grammar:</strong> Indicative; indirect statement; participles; relative clauses; no subjunctives</li>
+            <li><strong>Student task:</strong> Choose paths and justify choices by quoting Latin phrases from the text</li>
+            <li><strong>Estimated time:</strong> 30–40 minutes</li>
+          </ul>
+          <p class="small" style="margin:.6rem 0 0;">Tip: For collection, have students click “Dēpone responsum” and submit the downloaded .txt to your LMS.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<script>
+  // Standalone single-file version (no React/build needed)
+  // Notes: Deep branching can be expanded by adding nodes; this is a stable, hostable foundation.
+
+
+  const nodes = {
+    start: {
+      id: 'start',
+      title: 'Roma, Idūs Iānuāriae (49 BCE)',
+      latin: `Marcus Tullius Cicero domī sedet et litterās legit. Rumor per urbem fertur: Caesar <span class="gloss" data-gloss="the river boundary between Caesar’s province and Italy">Rubicōnem</span> trānsīvit cum <span class="gloss" data-gloss="legions (armies)">legiōnibus</span> suis. Senātūs perturbātus est et multī virī clārī urbem relinquere cōgitant. Cicero <span class="gloss" data-gloss="hesitates">dubitat</span> quid faciendum sit.`,
+      checks: [
+        { q: 'Quis Rubicōnem trānsīvit?', a: ['Caesar', 'Pompeius', 'Cicero'], correct: 0 },
+        { q: 'Cūr senātūs perturbātus est?', a: ['Quia Caesar cum legiōnibus venit', 'Quia pax facta est', 'Quia Pompeius victor est'], correct: 0 }
+      ],
+      choices: [
+        { text: 'Cicero statim senātum petit.', next: 'senate' },
+        { text: 'Cicero domī manet et rem per epistulās explorat.', next: 'letters' }
+      ]
+    },
+
+
+    senate: {
+      id: 'senate',
+      title: 'In senātū',
+      latin: `In senātū magnus clāmor est. Pompeius cōnsulēsque dīcunt Caesarem <span class="gloss" data-gloss="enemy">hostem</span> esse. Aliī tacent, aliī fugiunt. Cicero animadvertit multōs senātōrēs timōre commōtōs esse.`,
+      checks: [
+        { q: 'Quid Pompeius dīcit dē Caesare?', a: ['Hostem esse', 'Amīcum esse', 'In urbem nōn venīre'], correct: 0 }
+      ],
+      choices: [
+        { text: 'Cicero aperte Pompeium sustinet.', next: 'supportPompey' },
+        { text: 'Cicero tacet et discedit.', next: 'withdraw' },
+        { text: 'Cicero mediā viā īre conātur: neutrum laedit.', next: 'middleWay' }
+      ]
+    },
+
+    letters: {
+      id: 'letters',
+      title: 'Epistulae',
+      latin: `Cicero epistulās ab <span class="gloss" data-gloss="Cicero’s friend, Titus Pomponius Atticus">Atticō</span> accipit. Atticus monet tempus <span class="gloss" data-gloss="uncertain">incertum</span> esse et Cicerōnem neque Caesarem neque Pompeium offendere. Haec cōnsilia Cicerōnī grāta sunt, sed etiam perīculōsa videntur.`,
+      checks: [
+        { q: 'Quid Atticus monet?', a: ['Nē uterque offendantur', 'Ut Caesar statim petātur', 'Ut Pompeius statim oppugnetur'], correct: 0 }
+      ],
+      choices: [
+        { text: 'Cicero ad Pompeium proficīscī statuit.', next: 'supportPompey' },
+        { text: 'Cicero in Italiā manēre cōnstituit.', next: 'withdraw' },
+        { text: 'Cicero ad Caesarem litterās mittit.', next: 'letterToCaesar' }
+      ]
+    },
+
+    middleWay: {
+      id: 'middleWay',
+      title: 'Via Media',
+      latin: `Cicero putat concordiam servandam esse. Multa verba dīcit dē pāce, sed pauci eum audiunt. Senātōrēs ad bellum prōnī sunt, et Pompeius celeriter ex Italiā discedere parat.`,
+      checks: [
+        { q: 'Quid Cicero cupit?', a: ['Pācem', 'Bellum', 'Exsilium'], correct: 0 }
+      ],
+      choices: [
+        { text: 'Tandem Cicero Pompeium sequitur.', next: 'supportPompey' },
+        { text: 'Cicero domum redit et manet in villā.', next: 'withdraw' }
+      ]
+    },
+
+    letterToCaesar: {
+      id: 'letterToCaesar',
+      title: 'Epistula ad Caesarem (Quid sī?)',
+      latin: `Cicero epistulam ad Caesarem mittit: "Rem publicam servā!" Caesar respondit verbīs blandīs, sed exercitum suum nōn retinet. Cicero intellegit bellum iam prope esse.`,
+      checks: [
+        { q: 'Quid Caesar facit post epistulam?', a: ['Exercitum nōn retinet', 'Statim discedit', 'Pompeium capīt'], correct: 0 }
+      ],
+      choices: [
+        { text: 'Cicero tamen ad Pompeium proficīscitur.', next: 'supportPompey' },
+        { text: 'Cicero in Italiā manet et exspectat.', next: 'withdraw' }
+      ]
+    },
+
+    supportPompey: {
+      id: 'supportPompey',
+      title: 'Apud Pompeium',
+      latin: `Cicero Pompeium <span class="gloss" data-gloss="in Brundisium (Brindisi)">Brundisiī</span> convenit. Exercitus parvus est et multī dubitant. Pompeius tamen spērāvit sē auxilium ex Graeciā habitūrum esse. Cicero, quamquam timidus, cum eō manet.`,
+      checks: [
+        { q: 'Ubi Cicero Pompeium convenit?', a: ['Brundisiī', 'Pharsālī', 'Alexandriā'], correct: 0 },
+        { q: 'Quid Pompeius sperat?', a: ['Auxilium ex Graeciā', 'Pācem celerem', 'Nullōs hostēs'], correct: 0 }
+      ],
+      choices: [
+        { text: 'Cicero Pompeium in Graeciam sequitur.', next: 'pharsalus' },
+        { text: 'Cicero clam in Italiam redit (quid sī?).', next: 'whatIfItaly' }
+      ]
+    },
+
+    whatIfItaly: {
+      id: 'whatIfItaly',
+      title: 'Quid Sī...? (Iter Breve)',
+      latin: `Sī Cicero in Italiā mansiisset et Caesarem statim adiisset, fortasse maiōrem grātiam apud eum habuisset. Sed fama dē proeliīs et dē caedibus eum terrēret. Cicero mox intellegit sē ad cursum historiae redīre dēbēre.`,
+      checks: [
+        { q: 'Quid est haec via?', a: ['Brevis “quid sī”', 'Vera historia', 'Fābula deōrum'], correct: 0 }
+      ],
+      choices: [
+        { text: 'Ad cursum historiae redī.', next: 'pharsalus' }
+      ]
+    },
+
+    pharsalus: {
+      id: 'pharsalus',
+      title: 'Pharsālus',
+      latin: `Apud <span class="gloss" data-gloss="site of the decisive battle">Pharsālum</span> Pompeius a Caesare vincitur. Multī fugiunt, multī cadunt. Cicero, victōriam male ferēns, statuit Romam redīre et Caesarem <span class="gloss" data-gloss="merciful">clementem</span> esse sperat.`,
+      checks: [
+        { q: 'Quis vincitur apud Pharsālum?', a: ['Pompeius', 'Caesar', 'Cicero'], correct: 0 }
+      ],
+      choices: [
+        { text: 'Cicero Caesarem convenit.', next: 'afterCaesar' },
+        { text: 'Cicero silet et in villā sē cōndit.', next: 'withdrawAfterPharsalus' }
+      ]
+    },
+
+
+    withdraw: {
+      id: 'withdraw',
+      title: 'Cicero sē subtrahit',
+      latin: `Cicero putat rem publicam sine sanguine servārī nōn posse. Itaque sē ā bellō subtrahit et in villā manet. Nōn pugnāvit, sed animō dolēns spectat rem publicam <span class="gloss" data-gloss="slipping, collapsing">labentem</span>.`,
+      checks: [
+        { q: 'Ubi Cicero manet?', a: ['In villā', 'In castrīs', 'In senātū semper'], correct: 0 }
+      ],
+      choices: [
+        { text: 'Post victōriam Caesaris Romam redit.', next: 'afterCaesar' }
+      ]
+    },
+
+
+    withdrawAfterPharsalus: {
+      id: 'withdrawAfterPharsalus',
+      title: 'Post Proelium',
+      latin: `Post Pharsālum Cicero ad familiam suam redit. Deīcitur animus eius, sed spem habet fore ut Caesar moderātius imperet.`,
+      checks: [
+        { q: 'Quid Cicero sperat?', a: ['Caesarem moderātius imperāre', 'Pompeium redīre', 'Bellum statim finīrī sine victōre'], correct: 0 }
+      ],
+      choices: [
+        { text: 'Tandem Caesarem convenit.', next: 'afterCaesar' }
+      ]
+    },
+
+
+    afterCaesar: {
+      id: 'afterCaesar',
+      title: 'Post bellum',
+      latin: `Caesar victōr fuit. Cicerōnī <span class="gloss" data-gloss="spares">parcit</span> et eum honoribus nōn prīvat. Cicero tamen glōriam pristīnī temporis dēsīderat et dē futūrō reī publicae <span class="gloss" data-gloss="worried">sollicitus</span> est.`,
+      checks: [
+        { q: 'Quid Caesar facit Cicerōnī?', a: ['Parcit', 'Interficit', 'In exsilium mittit'], correct: 0 }
+      ],
+      choices: []
+    }
+  }
+
+
+  // --- state ---
+  let current = 'start'
+  let lastChoiceText = ''
+  const responses = {
+    path: [],
+    justifications: {},
+    checks: {}
+  }
+
+
+  // --- helpers ---
+  const $ = (id) => document.getElementById(id)
+
+
+  function renderChecks(node){
+    const wrap = $('checks')
+    wrap.innerHTML = ''
+    if (!node.checks || !node.checks.length) {
+      wrap.innerHTML = '<p class="small">(Nullae quaestiōnēs hīc.)</p>'
+      return
+    }
+
+
+    node.checks.forEach((chk, idx) => {
+      const key = `${node.id}__${idx}`
+      const block = document.createElement('div')
+      block.style.marginBottom = '12px'
+      block.innerHTML = `<p style="margin:.4rem 0;"><strong>${escapeHtml(chk.q)}</strong></p>`
+
+
+      chk.a.forEach((opt, i) => {
+        const btn = document.createElement('button')
+        btn.className = 'miniBtn'
+        btn.style.width = '100%'
+        btn.style.marginTop = '.35rem'
+        btn.textContent = opt
+        btn.onclick = () => {
+          responses.checks[key] = i
+          btn.style.borderColor = (i === chk.correct) ? 'rgba(52,211,153,.7)' : 'rgba(251,113,133,.7)'
+          btn.style.background = (i === chk.correct) ? 'rgba(52,211,153,.15)' : 'rgba(251,113,133,.12)'
+          saveLocal()
+        }
+        block.appendChild(btn)
+      })
+
+
+      wrap.appendChild(block)
+    })
+  }
+
+
+  function render(){
+    const node = nodes[current]
+    $('sceneTitle').innerText = node.title
+    $('nodeIdPill').innerText = `Nodus: ${node.id}`
+    $('latin').innerHTML = node.latin
+    $('progressPill').innerText = `${responses.path.length + 1} / ?` 
+
+
+    // choices
+    const choicesDiv = $('choices')
+    choicesDiv.innerHTML = ''
+    node.choices.forEach(c => {
+      const btn = document.createElement('button')
+      btn.textContent = c.text
+      btn.onclick = () => {
+        lastChoiceText = c.text
+        responses.path.push({ from: node.id, choice: c.text, to: c.next, at: new Date().toISOString() })
+        current = c.next
+        saveLocal()
+        render()
+      }
+      choicesDiv.appendChild(btn)
+    })
+
+
+    // checks
+    renderChecks(node)
+
+
+    // end state
+    if (!node.choices.length){
+      const endP = document.createElement('p')
+      endP.className = 'small'
+      endP.style.marginTop = '1rem'
+      endP.innerHTML = '<strong>Finis.</strong> Reflecte: quibus sententiīs e textū actiōnēs Cicerōnis iūstificās?' 
+      choicesDiv.appendChild(endP)
+    }
+
+
+    // justification box: persist per node
+    $('justify').value = responses.justifications[node.id] || ''
+  }
+
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;','\'':'&#039;'}[m] || m))
+  }
+
+
+  function saveLocal(){
+    try{ localStorage.setItem('cicero_bellum_civile_v1', JSON.stringify({ current, responses })) }catch(e){}
+  }
+
+
+  function loadLocal(){
+    try{
+      const raw = localStorage.getItem('cicero_bellum_civile_v1')
+      if (!raw) return
+      const data = JSON.parse(raw)
+      if (data.current && nodes[data.current]) current = data.current
+      if (data.responses){
+        Object.assign(responses, data.responses)
+      }
+    }catch(e){}
+  }
+
+
+  function flashSaved(){
+    const a = $('savedAlert')
+    a.style.display = 'block'
+    setTimeout(()=> a.style.display='none', 1200)
+  }
+
+
+  function downloadText(filename, text){
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = filename
+    a.click()
+    URL.revokeObjectURL(a.href)
+  }
+
+
+  // --- buttons ---
+  $('saveBtn').onclick = () => {
+    const node = nodes[current]
+    responses.justifications[node.id] = $('justify').value.trim()
+    saveLocal(); flashSaved()
+  }
+
+
+  $('downloadBtn').onclick = () => {
+    const node = nodes[current]
+    responses.justifications[node.id] = $('justify').value.trim()
+    saveLocal()
+
+
+    const out = {
+      title: 'Cicero in Bello Civili',
+      savedAt: new Date().toISOString(),
+      currentNode: current,
+      path: responses.path,
+      justifications: responses.justifications,
+      checks: responses.checks
+    }
+    downloadText('cicero_bellum_civile_responsa.txt', JSON.stringify(out, null, 2))
+  }
+
+
+  $('restartBtn').onclick = () => {
+    if (!confirm('Reīncīpere? (Your saved local progress will be cleared.)')) return
+    current = 'start'
+    responses.path = []
+    responses.justifications = {}
+    responses.checks = {}
+    saveLocal(); render()
+  }
+
+
+  // init
+  loadLocal()
+  render()
+</script>
+</body>
+</html>
